@@ -85,6 +85,9 @@ Kolom `category_id` dan `instructor_id` di tabel `materi` sudah otomatis memilik
 |---|---|---|---|---|---|---|
 | 1 | SIMPLE | materi | ALL | NULL | 13 | Using filesort |
 
+**Interpretasi:** 
+Hasil `EXPLAIN` menunjukkan `type: ALL` dan `key: NULL`, artinya MySQL tetap membaca seluruh baris tabel (full table scan) walaupun index `idx_materi_price` sudah dibuat — index-nya sama sekali tidak dipakai. Ini terjadi karena tabel `materi` cuma berisi 13 baris; untuk data sekecil ini, optimizer menganggap scan langsung ke semua baris lebih murah daripada baca index dulu baru cari ke tabel. Index seperti ini baru akan benar-benar dipakai dan berdampak ketika jumlah data sudah jauh lebih besar (ribuan/jutaan baris), karena di situ full scan jadi jauh lebih mahal dibanding baca index yang sudah terurut.
+
 ## Tools
 
 - MySQL / MariaDB / XAMPP
